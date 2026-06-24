@@ -1,0 +1,23 @@
+---
+import type { Link } from '../data/types'
+
+interface Props {
+  artistName: string
+  email?: string
+  heading?: string
+  links: Link[]
+}
+
+const { artistName, email, heading = 'Contact', links } = Astro.props
+---
+
+{(email || links.length > 0) && (
+  <footer class="contact-footer" id="contact" aria-labelledby="contact-heading">
+    <h2 id="contact-heading">{heading}</h2>
+    <div class="contact-links">
+      {email && <a href={`mailto:${email}`}>{email}</a>}
+      {links.map((link) => <a href={link.url} target="_blank" rel="noopener noreferrer">{link.label}</a>)}
+    </div>
+    <p>© {new Date().getFullYear()} {artistName}</p>
+  </footer>
+)}

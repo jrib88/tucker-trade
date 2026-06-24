@@ -1,0 +1,63 @@
+---
+import type { SiteData } from '../data/types'
+import SanityImage from './SanityImage.astro'
+
+interface Props {
+  artistName: string
+  hero: SiteData['hero']
+  hasMusic: boolean
+  hasContact: boolean
+}
+
+const { artistName, hero, hasMusic, hasContact } = Astro.props
+const records = hero.recordImages ?? []
+---
+
+<section class="home" id="home" aria-label="Home">
+  <div class="source-logo" aria-label={artistName}>
+    <img src="/assets/source-home.svg" alt={artistName} width="1366" height="2328" loading="eager" decoding="async" />
+  </div>
+
+  <div class="portrait-hero">
+    <SanityImage
+      image={hero.backgroundImage}
+      fallbackSrc="/assets/home-09-9f2961cb6c.png"
+      class="portrait-hero__background"
+      width={1451}
+      height={722}
+      loading="eager"
+    />
+    <SanityImage
+      image={hero.portraitImage}
+      fallbackSrc="/assets/home-10-478bd8530b.png"
+      fallbackAlt={`${artistName} in sunglasses and a cap`}
+      class="portrait-hero__artist"
+      width={1920}
+      height={2560}
+      loading="eager"
+    />
+  </div>
+
+  <div class="home-intro">
+    <h1>{hero.heading}</h1>
+    <p>{hero.intro}</p>
+  </div>
+
+  <SanityImage
+    image={hero.performanceImage}
+    fallbackSrc="/assets/home-18-e700edfc75.jpg"
+    fallbackAlt={`${artistName} performing on DJ decks`}
+    class="dj-photo"
+    width={1182}
+    height={665}
+  />
+
+  <div class="home-actions">
+    <a href={hasMusic ? '#music' : '#shows'}>Listen</a>
+    <a href={hasContact ? '#contact' : '#shows'}>Book &amp; contact</a>
+  </div>
+  <div class="records" aria-hidden="true">
+    <SanityImage image={records[0]} fallbackSrc="/assets/home-12-6b0c547bd1.png" class="matte-image" width={2130} height={2132} />
+    <SanityImage image={records[1]} fallbackSrc="/assets/home-13-3237ccbfbe.png" class="matte-image" width={2214} height={2214} />
+  </div>
+</section>

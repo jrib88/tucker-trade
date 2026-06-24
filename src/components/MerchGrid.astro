@@ -1,0 +1,30 @@
+---
+import type { MerchItem } from '../data/types'
+import SanityImage from './SanityImage.astro'
+
+interface Props {
+  items: MerchItem[]
+}
+
+const { items } = Astro.props
+---
+
+<section class="merch" id="merch" aria-labelledby="merch-heading">
+  <h2 id="merch-heading">Merch</h2>
+  <div class="merch-grid">
+    {items.map((item) => (
+      <article>
+        {item.productUrl ? (
+          <a href={item.productUrl} target="_blank" rel="noopener noreferrer" aria-label={`View ${item.title.replace('\n', ' ')}`}>
+            <SanityImage image={item.image} fallbackSrc={item.imageFallback} fallbackAlt={item.imageAlt} width={720} height={720} />
+          </a>
+        ) : (
+          <SanityImage image={item.image} fallbackSrc={item.imageFallback} fallbackAlt={item.imageAlt} width={720} height={720} />
+        )}
+        <h3>{item.title}</h3>
+        {item.price && <p class="price">{item.price}</p>}
+        {item.description && <p>{item.description}</p>}
+      </article>
+    ))}
+  </div>
+</section>

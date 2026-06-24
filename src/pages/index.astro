@@ -1,0 +1,27 @@
+---
+import ArtistIntro from '../components/ArtistIntro.astro'
+import ContactFooter from '../components/ContactFooter.astro'
+import Hero from '../components/Hero.astro'
+import MediaGallery from '../components/MediaGallery.astro'
+import MusicSection from '../components/MusicSection.astro'
+import ShowsSection from '../components/ShowsSection.astro'
+import VideoSection from '../components/VideoSection.astro'
+import { getSiteData } from '../data/site-data'
+import BaseLayout from '../layouts/BaseLayout.astro'
+
+const site = await getSiteData()
+const upcomingShows = site.shows.filter((show) => show.showType !== 'past')
+const pastShows = site.shows.filter((show) => show.showType === 'past')
+const hasContact = Boolean(site.contactEmail || site.socialLinks.length)
+---
+
+<BaseLayout title={site.siteTitle} description={site.siteDescription}>
+  <Hero artistName={site.artistName} hero={site.hero} hasMusic={site.soundcloudEmbeds.length > 0} hasContact={hasContact} />
+  <ArtistIntro bio={site.bio} />
+  <MusicSection embeds={site.soundcloudEmbeds} />
+  <VideoSection videos={site.videos} />
+  <ShowsSection heading={site.showHeading} shows={upcomingShows} />
+  <ShowsSection heading="Past shows" shows={pastShows} kind="past" />
+  <MediaGallery items={site.mediaItems} />
+  <ContactFooter artistName={site.artistName} email={site.contactEmail} heading={site.contactHeading} links={site.socialLinks} />
+</BaseLayout>

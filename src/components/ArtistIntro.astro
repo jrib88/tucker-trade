@@ -1,0 +1,41 @@
+---
+import { PortableText } from 'astro-portabletext'
+import type { SiteData } from '../data/types'
+import SanityImage from './SanityImage.astro'
+
+interface Props {
+  bio: SiteData['bio']
+}
+
+const { bio } = Astro.props
+---
+
+<section class="about" id="about" aria-labelledby="about-heading">
+  <div class="about-intro">
+    <div class="about-copy">
+      <h2 id="about-heading">{bio.heading}</h2>
+      <div class="audio-marks" aria-hidden="true"><span>◀◀</span><span>▶</span><span>Ⅱ</span><span>■</span><span>▶▶</span></div>
+      {bio.body?.length > 0 && (
+        <div class="rich-copy"><PortableText value={bio.body as any} /></div>
+      )}
+    </div>
+    <SanityImage
+      image={bio.featureImage}
+      fallbackSrc="/assets/about-04-72bb5b99bf.jpg"
+      fallbackAlt="Musicians performing together outdoors"
+      class="about-band"
+      width={1200}
+      height={900}
+    />
+  </div>
+  <div class="stage-title"><h2>{bio.stageHeading}</h2><span aria-hidden="true"></span></div>
+  <div class="guitar-band">
+    <SanityImage
+      image={bio.stageImage}
+      fallbackSrc="/assets/about-08-ae4e78a0ba.jpg"
+      fallbackAlt="A musician playing an electric guitar"
+      width={1600}
+      height={700}
+    />
+  </div>
+</section>

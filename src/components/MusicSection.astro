@@ -1,0 +1,29 @@
+---
+import type { Embed } from '../data/types'
+
+interface Props {
+  embeds: Embed[]
+}
+
+const { embeds } = Astro.props
+---
+
+{embeds.length > 0 && (
+  <section class="media-section" id="music" aria-labelledby="music-heading">
+    <h2 id="music-heading">Listen</h2>
+    <div class="embed-grid">
+      {embeds.map((embed) => (
+        <article class="embed-card">
+          <h3>{embed.title}</h3>
+          {embed.description && <p>{embed.description}</p>}
+          <iframe
+            title={embed.title}
+            src={embed.embedUrl}
+            loading="lazy"
+            allow="autoplay"
+          ></iframe>
+        </article>
+      ))}
+    </div>
+  </section>
+)}

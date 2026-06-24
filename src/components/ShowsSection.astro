@@ -1,0 +1,45 @@
+---
+import type { Show } from '../data/types'
+
+interface Props {
+  heading: string
+  shows: Show[]
+  kind?: 'upcoming' | 'past'
+}
+
+function formatDate(date: string) {
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  }).format(new Date(`${date}T12:00:00`))
+}
+
+const { heading, shows, kind = 'upcoming' } = Astro.props
+const firstColumn = shows.filter((_, index) => index % 2 === 0)
+const secondColumn = shows.filter((_, index) => index % 2 !== 0)
+---
+
+{shows.length > 0 && (
+  <section class:list={['shows', kind === 'past' && 'shows--past']} id={kind === 'upcoming' ? 'shows' : 'past-shows'} aria-labelledby={`${kind}-shows-heading`}>
+    {kind === 'upcoming' && <img class="shows-background" src="/assets/upcoming-shows-01-9f2961cb6c.png" alt="" width="1451" height="722" loading="lazy" decoding="async" />}
+    <h2 id={`${kind}-shows-heading`}>{heading}</h2>
+    <div class="show-columns">
+      {[firstColumn, secondColumn].map((column) => (
+        <div>
+          {column.map((show) => (
+            <article>
+              <h3>{formatDate(show.date)}</h3>
+              <p>
+                {show.title ? `${show.title} — ` : ''}{show.venue}{show.city && ` – ${show.city}`}<br />
+                {show.ticketUrl ? (
+                  <a href={show.ticketUrl} target="_blank" rel="noopener noreferrer">{show.ticketStatus || 'Tickets'}</a>
+                ) : show.ticketStatus}
+              </p>
+            </article>
+          ))}
+        </div>
+      ))}
+    </div>
+  </section>
+)}

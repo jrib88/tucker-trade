@@ -1,0 +1,50 @@
+---
+import type { Video } from '../data/types'
+
+interface Props {
+  videos: Video[]
+}
+
+function getYouTubeEmbedUrl(url: string) {
+  try {
+    const parsed = new URL(url)
+    const host = parsed.hostname.replace(/^www\./, '')
+    const videoId = host === 'youtu.be'
+      ? parsed.pathname.slice(1)
+      : parsed.searchParams.get('v') ?? parsed.pathname.split('/').filter(Boolean).pop()
+
+    return videoId && /^[A-Za-z0-9_-]{11}$/.test(videoId)
+      ? `https://www.youtube-nocookie.com/embed/${videoId}`
+      : undefined
+  } catch {
+    return undefined
+  }
+}
+
+const { videos } = Astro.props
+const playableVideos = videos.map((video) => ({ ...video, embedUrl: getYouTubeEmbedUrl(video.url) })).filter((video) => video.embedUrl)
+---
+
+{playableVideos.length > 0 && (
+  <section class="media-section video-section" id="videos" aria-labelledby="videos-heading">
+    <h2 id="videos-heading">Live</h2>
+    <div class="video-grid">
+      {playableVideos.map((video) => (
+        <article class="video-card">
+          <div class="video-frame">
+            <iframe
+              src={video.embedUrl}
+              title={video.title}
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            ></iframe>
+          </div>
+          <h3>{video.title}</h3>
+          {video.description && <p>{video.description}</p>}
+        </article>
+      ))}
+    </div>
+  </section>
+)}

@@ -1,0 +1,38 @@
+---
+import { imageUrl } from '../data/image'
+import type { SanityImage as SanityImageValue } from '../data/types'
+
+interface Props {
+  image?: SanityImageValue
+  fallbackSrc?: string
+  fallbackAlt?: string
+  class?: string
+  width?: number
+  height?: number
+  loading?: 'eager' | 'lazy'
+}
+
+const {
+  image,
+  fallbackSrc,
+  fallbackAlt = '',
+  class: className,
+  width,
+  height,
+  loading = 'lazy',
+} = Astro.props
+const src = imageUrl(image, width, height) ?? fallbackSrc
+const alt = image?.alt ?? fallbackAlt
+---
+
+{src && (
+  <img
+    class={className}
+    src={src}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={loading}
+    decoding="async"
+  />
+)}
