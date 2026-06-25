@@ -40,7 +40,7 @@ export async function getSiteData(): Promise<SiteData> {
       soundcloudEmbeds: settings?.soundcloudEmbeds ?? [],
       videos: settings?.videos ?? [],
       mediaItems: settings?.mediaItems ?? [],
-      socialLinks: settings?.socialLinks ?? [],
+      socialLinks: settings?.socialLinks?.length ? settings.socialLinks : fallbackSiteData.socialLinks,
       contactEmail: settings?.contactEmail ?? fallbackSiteData.contactEmail,
       contactHeading: settings?.contactHeading ?? fallbackSiteData.contactHeading,
       shows: (shows?.length ? shows : fallbackSiteData.shows) as Show[],

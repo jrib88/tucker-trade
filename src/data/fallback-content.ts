@@ -49,7 +49,18 @@ export const fallbackSiteData: SiteData = {
   soundcloudEmbeds: [],
   videos: [],
   mediaItems: [],
-  socialLinks: [],
+  socialLinks: [
+    {
+      label: 'Instagram',
+      platform: 'instagram',
+      url: 'https://www.instagram.com/tuckertrade_/',
+    },
+    {
+      label: 'TikTok',
+      platform: 'tiktok',
+      url: 'https://www.tiktok.com/@tuckertrade',
+    },
+  ],
   contactEmail: 'tunesbytuckertrade@gmail.com',
   contactHeading: 'Booking / Contact',
   showHeading: 'Upcoming',
