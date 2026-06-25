@@ -11,12 +11,14 @@ interface Props {
 
 const { artistName, hero, hasMusic, hasContact } = Astro.props
 const records = hero.recordImages ?? []
+const artistLabel = 'Artist Label: Flaunt the Frequency'
 ---
 
 <section class="home" id="home" aria-label="Home">
   <div class="source-logo" aria-label={artistName}>
     <img src="/assets/source-home.svg" alt={artistName} width="1366" height="2328" loading="eager" decoding="async" />
   </div>
+  <p class="artist-label-banner">{artistLabel}</p>
 
   <div class="portrait-hero">
     <SanityImage

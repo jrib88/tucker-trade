@@ -1,4 +1,4 @@
-import { defineField, defineType } from 'sanity'
+import { defineArrayMember, defineField, defineType } from 'sanity'
 import { CogIcon } from '@sanity/icons'
 import { bioBody } from './shared'
 
@@ -11,6 +11,8 @@ export const siteSettings = defineType({
     artistName: 'Tucker Trade',
     siteTitle: 'Tucker Trade',
     showHeading: 'Upcoming',
+    contactHeading: 'Booking / Contact',
+    contactEmail: 'tunesbytuckertrade@gmail.com',
   },
   fields: [
     defineField({ name: 'artistName', title: 'Artist name', type: 'string', validation: (rule) => rule.required() }),
@@ -48,10 +50,37 @@ export const siteSettings = defineType({
       ],
     }),
     defineField({
+      name: 'music',
+      title: 'Music',
+      type: 'object',
+      fields: [
+        defineField({
+          name: 'links',
+          title: 'Streaming links',
+          description: 'Add the Spotify and Apple Music / iTunes links shown in the left column.',
+          type: 'array',
+          of: [defineArrayMember({ type: 'socialLink' })],
+          validation: (rule) => rule.max(4),
+        }),
+        defineField({
+          name: 'featuredTrack',
+          title: 'Featured audio player',
+          description: 'Paste a Spotify, Apple Music, iTunes, or SoundCloud song URL for the embedded player.',
+          type: 'audioTrack',
+        }),
+      ],
+    }),
+    defineField({
       name: 'soundcloudEmbeds',
-      title: 'SoundCloud tracks and playlists',
+      title: 'SoundCloud tracks and playlists (Deprecated)',
       type: 'array',
-      of: [{ type: 'soundcloudEmbed' }],
+      deprecated: {
+        reason: 'Use Music > Featured audio player for Spotify, Apple Music, iTunes, or SoundCloud URLs.',
+      },
+      readOnly: true,
+      hidden: ({ value }) => value === undefined,
+      initialValue: undefined,
+      of: [defineArrayMember({ type: 'soundcloudEmbed' })],
     }),
     defineField({
       name: 'videos',
@@ -66,8 +95,8 @@ export const siteSettings = defineType({
       of: [{ type: 'mediaItem' }],
     }),
     defineField({ name: 'showHeading', title: 'Upcoming shows heading', type: 'string', validation: (rule) => rule.required() }),
-    defineField({ name: 'contactHeading', title: 'Contact section heading', type: 'string', initialValue: 'Contact' }),
-    defineField({ name: 'contactEmail', title: 'Booking / contact email', type: 'string', validation: (rule) => rule.email() }),
+    defineField({ name: 'contactHeading', title: 'Contact section heading', type: 'string', initialValue: 'Booking / Contact' }),
+    defineField({ name: 'contactEmail', title: 'Booking / contact email', type: 'string', initialValue: 'tunesbytuckertrade@gmail.com', validation: (rule) => rule.email() }),
     defineField({
       name: 'socialLinks',
       title: 'Social and contact links',

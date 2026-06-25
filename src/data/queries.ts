@@ -31,6 +31,10 @@ export const SITE_SETTINGS_QUERY = defineQuery(/* groq */ `
       stageHeading,
       stageImage { ${imageFields} }
     },
+    music {
+      links[] { _key, label, url, platform },
+      featuredTrack { _key, title, url, description }
+    },
     soundcloudEmbeds[] { _key, title, embedUrl, description },
     videos[] { _key, title, url, description },
     mediaItems[] {

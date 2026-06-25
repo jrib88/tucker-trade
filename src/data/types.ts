@@ -52,6 +52,13 @@ export type Embed = {
   description?: string
 }
 
+export type AudioTrack = {
+  _key?: string
+  title?: string
+  url: string
+  description?: string
+}
+
 export type Video = {
   _key?: string
   title: string
@@ -85,6 +92,10 @@ export type SiteData = {
     featureImage?: SanityImage
     stageHeading: string
     stageImage?: SanityImage
+  }
+  music: {
+    links: Link[]
+    featuredTrack?: AudioTrack
   }
   soundcloudEmbeds: Embed[]
   videos: Video[]

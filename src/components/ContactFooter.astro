@@ -8,16 +8,20 @@ interface Props {
   links: Link[]
 }
 
-const { artistName, email, heading = 'Contact', links } = Astro.props
+const { artistName, email, heading = 'Booking / Contact', links } = Astro.props
 ---
 
-{(email || links.length > 0) && (
-  <footer class="contact-footer" id="contact" aria-labelledby="contact-heading">
-    <h2 id="contact-heading">{heading}</h2>
+<footer class="contact-footer" id="contact" aria-labelledby="contact-heading">
+  <h2 id="contact-heading">{heading}</h2>
+  {email && (
+    <p class="contact-copy">
+      For all inquiries, bookings, collaborations, and press, email <a href={`mailto:${email}`}>{email}</a>.
+    </p>
+  )}
+  {links.length > 0 && (
     <div class="contact-links">
-      {email && <a href={`mailto:${email}`}>{email}</a>}
       {links.map((link) => <a href={link.url} target="_blank" rel="noopener noreferrer">{link.label}</a>)}
     </div>
-    <p>© {new Date().getFullYear()} {artistName}</p>
-  </footer>
-)}
+  )}
+  <p class="contact-footer__copyright">© {new Date().getFullYear()} {artistName}</p>
+</footer>

@@ -1,6 +1,23 @@
 import { defineArrayMember, defineField, defineType } from 'sanity'
 import { ImageIcon, LinkIcon, PlayIcon } from '@sanity/icons'
 
+function validateAudioUrl(value?: string) {
+  if (!value) return true
+
+  try {
+    const host = new URL(value).hostname.toLowerCase().replace(/^www\./, '')
+    const isSupportedHost = host === 'open.spotify.com'
+      || host === 'music.apple.com'
+      || host === 'itunes.apple.com'
+      || host === 'soundcloud.com'
+      || host.endsWith('.soundcloud.com')
+
+    return isSupportedHost || 'Use a Spotify, Apple Music, iTunes, or SoundCloud URL.'
+  } catch {
+    return 'Enter a valid audio URL.'
+  }
+}
+
 export const accessibleImage = defineType({
   name: 'accessibleImage',
   title: 'Image',
@@ -52,6 +69,25 @@ export const soundcloudEmbed = defineType({
     }),
   ],
   preview: { select: { title: 'title', subtitle: 'embedUrl' } },
+})
+
+export const audioTrack = defineType({
+  name: 'audioTrack',
+  title: 'Audio track',
+  type: 'object',
+  icon: PlayIcon,
+  fields: [
+    defineField({ name: 'title', type: 'string', validation: (rule) => rule.required() }),
+    defineField({ name: 'description', type: 'text', rows: 2 }),
+    defineField({
+      name: 'url',
+      title: 'Audio URL',
+      description: 'Paste a Spotify, Apple Music, iTunes, or SoundCloud URL.',
+      type: 'url',
+      validation: (rule) => rule.required().uri({ scheme: ['https'] }).custom(validateAudioUrl),
+    }),
+  ],
+  preview: { select: { title: 'title', subtitle: 'url' } },
 })
 
 export const youtubeVideo = defineType({

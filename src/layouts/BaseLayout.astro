@@ -19,6 +19,75 @@ const { title, description } = Astro.props
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="site-header" data-site-header>
+      <div class="site-header__inner">
+        <a class="site-brand" href="#home" aria-label={title} aria-hidden="true" tabindex="-1" data-site-brand>
+          <img src="/assets/source-home.svg" alt="" width="1366" height="2328" loading="eager" decoding="async" />
+        </a>
+        <nav class="site-nav" aria-label="Primary navigation" data-site-nav>
+          <a href="#home">Home</a>
+          <a href="#music">Music</a>
+          <a href="#shows">Live</a>
+          <a href="#contact">Booking / Contact</a>
+        </nav>
+      </div>
+    </header>
     <main id="main-content"><slot /></main>
+    <script>
+      const header = document.querySelector('[data-site-header]')
+      const brand = document.querySelector('[data-site-brand]')
+      const nav = document.querySelector('[data-site-nav]')
+      const heroLogo = document.querySelector('.source-logo')
+      let isTicking = false
+
+      function updateNavShift() {
+        if (!(header instanceof HTMLElement) || !nav) return
+
+        const headerRect = header.getBoundingClientRect()
+        const navRect = nav.getBoundingClientRect()
+        const headerInner = header.querySelector('.site-header__inner')
+        const headerStyles = headerInner ? window.getComputedStyle(headerInner) : null
+        const paddingRight = headerStyles ? Number.parseFloat(headerStyles.paddingRight) || 0 : 0
+        const targetShift = Math.max(0, (headerRect.width / 2) - paddingRight - (navRect.width / 2))
+
+        header.style.setProperty('--site-nav-shift', `${targetShift}px`)
+      }
+
+      function updateHeaderState() {
+        if (!(header instanceof HTMLElement)) return
+        updateNavShift()
+
+        const hasPassedHeroLogo = heroLogo
+          ? heroLogo.getBoundingClientRect().bottom <= header.getBoundingClientRect().height + 1
+          : window.scrollY > 16
+
+        header.classList.toggle('site-header--scrolled', hasPassedHeroLogo)
+
+        if (brand) {
+          if (hasPassedHeroLogo) {
+            brand.removeAttribute('aria-hidden')
+            brand.removeAttribute('tabindex')
+          } else {
+            brand.setAttribute('aria-hidden', 'true')
+            brand.setAttribute('tabindex', '-1')
+          }
+        }
+      }
+
+      function requestHeaderUpdate() {
+        if (isTicking) return
+
+        isTicking = true
+        window.requestAnimationFrame(() => {
+          updateHeaderState()
+          isTicking = false
+        })
+      }
+
+      updateHeaderState()
+      window.addEventListener('load', updateHeaderState)
+      window.addEventListener('resize', requestHeaderUpdate)
+      window.addEventListener('scroll', requestHeaderUpdate, { passive: true })
+    </script>
   </body>
 </html>

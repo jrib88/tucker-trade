@@ -28,10 +28,30 @@ export const fallbackSiteData: SiteData = {
     ],
     stageHeading: 'From the\nstage.',
   },
+  music: {
+    links: [
+      {
+        label: 'Spotify',
+        platform: 'spotify',
+        url: 'https://open.spotify.com/artist/1vCZ3pfyE3EJ2nvdHndO2P?si=WqvnHiiPQC2sNB0-UYhgOA',
+      },
+      {
+        label: 'iTunes / Apple Music',
+        platform: 'apple',
+        url: 'https://music.apple.com/ca/artist/tucker-trade/1800073687',
+      },
+    ],
+    featuredTrack: {
+      title: 'Petty Excuses',
+      url: 'https://open.spotify.com/track/5VmvN87tauCdE1LxVrs4ZI',
+    },
+  },
   soundcloudEmbeds: [],
   videos: [],
   mediaItems: [],
   socialLinks: [],
+  contactEmail: 'tunesbytuckertrade@gmail.com',
+  contactHeading: 'Booking / Contact',
   showHeading: 'Upcoming',
   shows: [
     { date: '2030-04-04', venue: 'The Furnace', city: 'Blackridge City', ticketStatus: 'Sold out', showType: 'upcoming' },

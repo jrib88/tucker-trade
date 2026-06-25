@@ -1,29 +1,45 @@
 ---
-import type { Embed } from '../data/types'
+import { getAudioEmbed } from '../data/audio-embed'
+import type { SiteData } from '../data/types'
 
 interface Props {
-  embeds: Embed[]
+  music: SiteData['music']
 }
 
-const { embeds } = Astro.props
+const { music } = Astro.props
+const featuredTrack = music.featuredTrack
+const audioEmbed = getAudioEmbed(featuredTrack?.url)
+const iframeTitle = featuredTrack?.title ? `${featuredTrack.title} audio player` : `Featured audio on ${audioEmbed?.provider}`
+const playerClass = audioEmbed?.kind === 'single' ? 'music-player music-player--single' : 'music-player'
 ---
 
-{embeds.length > 0 && (
-  <section class="media-section" id="music" aria-labelledby="music-heading">
-    <h2 id="music-heading">Listen</h2>
-    <div class="embed-grid">
-      {embeds.map((embed) => (
-        <article class="embed-card">
-          <h3>{embed.title}</h3>
-          {embed.description && <p>{embed.description}</p>}
-          <iframe
-            title={embed.title}
-            src={embed.embedUrl}
-            loading="lazy"
-            allow="autoplay"
-          ></iframe>
-        </article>
-      ))}
+<section class="music" id="music" aria-labelledby="music-heading">
+  <div class="music-columns">
+    <div class="music-copy">
+      <h2 id="music-heading">Music</h2>
+      <h3>Listen to Tucker's Tunes on:</h3>
+      <div class="music-links">
+        {music.links.map((link) => (
+          <a href={link.url} target="_blank" rel="noopener noreferrer" aria-label={`Listen on ${link.label}`}>
+            {link.label}
+          </a>
+        ))}
+      </div>
     </div>
-  </section>
-)}
+    <div class={playerClass} aria-label={featuredTrack?.title ?? 'Featured audio'}>
+      {audioEmbed ? (
+        <iframe
+          title={iframeTitle}
+          src={audioEmbed.src}
+          loading="lazy"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      ) : featuredTrack?.url && (
+        <a class="music-player-fallback" href={featuredTrack.url} target="_blank" rel="noopener noreferrer">
+          {featuredTrack.title ?? 'Open featured audio'}
+        </a>
+      )}
+    </div>
+  </div>
+</section>

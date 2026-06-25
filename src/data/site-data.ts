@@ -16,16 +16,33 @@ export async function getSiteData(): Promise<SiteData> {
       sanityClient.fetch(SHOWS_QUERY),
       sanityClient.fetch(MERCH_QUERY),
     ])
+    const legacyFeaturedTrack = settings?.soundcloudEmbeds?.[0]
+    const featuredTrack = settings?.music?.featuredTrack
+      ?? (legacyFeaturedTrack
+        ? {
+            title: legacyFeaturedTrack.title,
+            url: legacyFeaturedTrack.embedUrl,
+            description: legacyFeaturedTrack.description,
+          }
+        : fallbackSiteData.music.featuredTrack)
 
     return {
       ...fallbackSiteData,
       ...settings,
       hero: { ...fallbackSiteData.hero, ...settings?.hero },
       bio: { ...fallbackSiteData.bio, ...settings?.bio },
+      music: {
+        ...fallbackSiteData.music,
+        ...settings?.music,
+        links: settings?.music?.links?.length ? settings.music.links : fallbackSiteData.music.links,
+        featuredTrack,
+      },
       soundcloudEmbeds: settings?.soundcloudEmbeds ?? [],
       videos: settings?.videos ?? [],
       mediaItems: settings?.mediaItems ?? [],
       socialLinks: settings?.socialLinks ?? [],
+      contactEmail: settings?.contactEmail ?? fallbackSiteData.contactEmail,
+      contactHeading: settings?.contactHeading ?? fallbackSiteData.contactHeading,
       shows: (shows?.length ? shows : fallbackSiteData.shows) as Show[],
       merch: (merch?.length ? merch : fallbackSiteData.merch) as MerchItem[],
     }
