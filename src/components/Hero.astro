@@ -16,7 +16,7 @@ const artistLabel = 'Artist Label: Flaunt the Frequency'
 
 <section class="home" id="home" aria-label="Home">
   <div class="source-logo" aria-label={artistName}>
-    <img src="/assets/source-home.svg" alt={artistName} width="1366" height="2328" loading="eager" decoding="async" />
+    <img src="/assets/tt-logo.png" alt={artistName} width="3024" height="550" loading="eager" decoding="async" />
   </div>
   <p class="artist-label-banner">{artistLabel}</p>
 
@@ -54,12 +54,14 @@ const artistLabel = 'Artist Label: Flaunt the Frequency'
     height={665}
   />
 
-  <div class="home-actions">
-    <a href={hasMusic ? '#music' : '#shows'}>Listen</a>
-    <a href={hasContact ? '#contact' : '#shows'}>Book &amp; contact</a>
-  </div>
-  <div class="records" aria-hidden="true">
-    <SanityImage image={records[0]} fallbackSrc="/assets/home-12-6b0c547bd1.png" class="matte-image" width={2130} height={2132} />
-    <SanityImage image={records[1]} fallbackSrc="/assets/home-13-3237ccbfbe.png" class="matte-image" width={2214} height={2214} />
+  <div class="records">
+    <a class="record-link" href={hasMusic ? '#music' : '#shows'}>
+      <SanityImage image={records[0]} fallbackSrc="/assets/home-12-6b0c547bd1.png" class="matte-image" width={2130} height={2132} />
+      <span class="record-link__label">Listen</span>
+    </a>
+    <a class="record-link" href={hasContact ? '#contact' : '#shows'}>
+      <SanityImage image={records[0]} fallbackSrc="/assets/home-12-6b0c547bd1.png" class="matte-image" width={2130} height={2132} />
+      <span class="record-link__label record-link__label--book">Book &amp; contact</span>
+    </a>
   </div>
 </section>
