@@ -1,4 +1,5 @@
 ---
+import BrandIcon from './BrandIcon.astro'
 import { getAudioEmbed } from '../data/audio-embed'
 import type { SiteData } from '../data/types'
 
@@ -20,8 +21,8 @@ const playerClass = audioEmbed?.kind === 'single' ? 'music-player music-player--
       <h3>Listen to Tucker's Tunes on:</h3>
       <div class="music-links">
         {music.links.map((link) => (
-          <a href={link.url} target="_blank" rel="noopener noreferrer" aria-label={`Listen on ${link.label}`}>
-            {link.label}
+          <a href={link.url} target="_blank" rel="noopener noreferrer" aria-label={`Listen on ${link.label}`} title={link.label}>
+            <BrandIcon platform={link.platform} label={link.label} />
           </a>
         ))}
       </div>

@@ -7,6 +7,24 @@ const hasSanityConfig = Boolean(
   import.meta.env.PUBLIC_SANITY_PROJECT_ID && import.meta.env.PUBLIC_SANITY_DATASET,
 )
 
+function mergeLinksWithFallback<T extends { platform?: string; url: string }>(
+  links: T[] | null | undefined,
+  fallbackLinks: T[],
+) {
+  const mergedLinks = links?.length ? [...links] : []
+  const existingPlatforms = new Set(mergedLinks.map((link) => link.platform?.toLowerCase()).filter(Boolean))
+  const existingUrls = new Set(mergedLinks.map((link) => link.url))
+
+  for (const fallbackLink of fallbackLinks) {
+    const platform = fallbackLink.platform?.toLowerCase()
+    const hasMatch = platform ? existingPlatforms.has(platform) : existingUrls.has(fallbackLink.url)
+
+    if (!hasMatch) mergedLinks.push(fallbackLink)
+  }
+
+  return mergedLinks
+}
+
 export async function getSiteData(): Promise<SiteData> {
   if (!hasSanityConfig) return fallbackSiteData
 
@@ -34,13 +52,13 @@ export async function getSiteData(): Promise<SiteData> {
       music: {
         ...fallbackSiteData.music,
         ...settings?.music,
-        links: settings?.music?.links?.length ? settings.music.links : fallbackSiteData.music.links,
+        links: mergeLinksWithFallback(settings?.music?.links, fallbackSiteData.music.links),
         featuredTrack,
       },
       soundcloudEmbeds: settings?.soundcloudEmbeds ?? [],
       videos: settings?.videos ?? [],
       mediaItems: settings?.mediaItems ?? [],
-      socialLinks: settings?.socialLinks?.length ? settings.socialLinks : fallbackSiteData.socialLinks,
+      socialLinks: mergeLinksWithFallback(settings?.socialLinks, fallbackSiteData.socialLinks),
       contactEmail: settings?.contactEmail ?? fallbackSiteData.contactEmail,
       contactHeading: settings?.contactHeading ?? fallbackSiteData.contactHeading,
       shows: (shows?.length ? shows : fallbackSiteData.shows) as Show[],

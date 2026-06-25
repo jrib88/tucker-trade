@@ -40,6 +40,11 @@ export const fallbackSiteData: SiteData = {
         platform: 'apple',
         url: 'https://music.apple.com/ca/artist/tucker-trade/1800073687',
       },
+      {
+        label: 'SoundCloud',
+        platform: 'soundcloud',
+        url: 'https://soundcloud.com/tucker-trade/',
+      },
     ],
     featuredTrack: {
       title: 'Petty Excuses',

@@ -1,4 +1,5 @@
 ---
+import BrandIcon from './BrandIcon.astro'
 import type { Link } from '../data/types'
 
 interface Props {
@@ -18,10 +19,16 @@ const { artistName, email, heading = 'Booking / Contact', links } = Astro.props
       For all inquiries, bookings, collaborations, and press, email <a href={`mailto:${email}`}>{email}</a>.
     </p>
   )}
-  {links.length > 0 && (
-    <div class="contact-links">
-      {links.map((link) => <a href={link.url} target="_blank" rel="noopener noreferrer">{link.label}</a>)}
-    </div>
-  )}
-  <p class="contact-footer__copyright">© {new Date().getFullYear()} {artistName}</p>
+  <div class="contact-footer__bottom">
+    <p class="contact-footer__copyright">© {new Date().getFullYear()} {artistName}</p>
+    {links.length > 0 && (
+      <nav class="contact-links" aria-label="Social links">
+        {links.map((link) => (
+          <a href={link.url} target="_blank" rel="noopener noreferrer" aria-label={link.label} title={link.label}>
+            <BrandIcon platform={link.platform} label={link.label} />
+          </a>
+        ))}
+      </nav>
+    )}
+  </div>
 </footer>
